@@ -26,6 +26,12 @@ void AAuraEnemy::UnHighlightActor()
 	SetDepthAndStencil(Weapon, false, 0);
 }
 
+void AAuraEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}
+
 void AAuraEnemy::SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value)
 {
 	if (SkeletalMeshComp)

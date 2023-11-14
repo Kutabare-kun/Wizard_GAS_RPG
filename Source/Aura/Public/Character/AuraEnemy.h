@@ -14,8 +14,13 @@ class AURA_API AAuraEnemy
 public:
 	AAuraEnemy();
 
+	// Enemy Interface
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
+
+protected:
+
+	virtual void BeginPlay() override;
 
 private:
 	void SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value);
