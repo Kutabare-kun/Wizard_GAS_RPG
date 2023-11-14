@@ -1,15 +1,28 @@
 #include "Character/AuraEnemy.h"
+#include "Aura/Aura.h"
+
+AAuraEnemy::AAuraEnemy()
+{
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+}
 
 void AAuraEnemy::HighlightActor()
 {
-	bHighlighted = true;
-
-	UE_LOG(LogTemp, Log, TEXT("[%s], Highlighted: %s"), *GetNameSafe(this), bHighlighted ? TEXT("TRUE") : TEXT("FALSE"));
+	SetDepthAndStencil(GetMesh(), true, CUSTOM_DEPTH_RED);
+	SetDepthAndStencil(Weapon, true, CUSTOM_DEPTH_RED);
 }
 
 void AAuraEnemy::UnHighlightActor()
 {
-	bHighlighted = false;
+	SetDepthAndStencil(GetMesh(), false, 0);
+	SetDepthAndStencil(Weapon, false, 0);
+}
 
-	UE_LOG(LogTemp, Log, TEXT("[%s], Highlighted: %s"), *GetNameSafe(this), bHighlighted ? TEXT("TRUE") : TEXT("FALSE"));
+void AAuraEnemy::SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value)
+{
+	if (SkeletalMeshComp)
+	{
+		SkeletalMeshComp->SetRenderCustomDepth(bHighlighted);
+		SkeletalMeshComp->SetCustomDepthStencilValue(Value);
+	}
 }

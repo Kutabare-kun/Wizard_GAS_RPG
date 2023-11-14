@@ -12,9 +12,11 @@ class AURA_API AAuraEnemy
 	GENERATED_BODY()
 
 public:
+	AAuraEnemy();
+
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
-	
-	UPROPERTY(BlueprintReadOnly)
-	bool bHighlighted = false;
+
+private:
+	void SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value);
 };
