@@ -23,16 +23,16 @@ protected:
 	virtual void SetupInputComponent() override;
 
 private:
+	void Move(const struct FInputActionValue& InputActionValue);
+
+	void CursorTrace();
+
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputMappingContext> AuraContext;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	IEnemyInterface* LastActor;
-	IEnemyInterface* ThisActor;
-
-	void Move(const struct FInputActionValue& InputActionValue);
-
-	void CursorTrace();
+	TObjectPtr<IEnemyInterface> LastActor;
+	TObjectPtr<IEnemyInterface> ThisActor;
 };
