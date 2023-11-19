@@ -37,7 +37,7 @@ struct FWidgetControllerParams
 	TObjectPtr<UAttributeSet> AttributeSet = nullptr;
 };
 
-UCLASS()
+UCLASS(Abstract)
 class AURA_API UAuraWidgetController : public UObject
 {
 	GENERATED_BODY()
@@ -45,6 +45,9 @@ class AURA_API UAuraWidgetController : public UObject
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
+
+	UFUNCTION()
+	virtual void BroadcastInitialValues() PURE_VIRTUAL(UAuraWidgetController::BroadcastInitialValues, ;);
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
