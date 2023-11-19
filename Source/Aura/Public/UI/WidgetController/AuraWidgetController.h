@@ -49,6 +49,9 @@ public:
 	UFUNCTION()
 	virtual void BroadcastInitialValues() PURE_VIRTUAL(UAuraWidgetController::BroadcastInitialValues, ;);
 
+	UFUNCTION()
+	virtual void BindCallbacksToDependencies() PURE_VIRTUAL(UAuraWidgetController::BindCallbacksToDependencies, ;);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<APlayerController> PlayerController;
