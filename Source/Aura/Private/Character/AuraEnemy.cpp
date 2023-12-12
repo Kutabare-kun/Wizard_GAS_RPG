@@ -34,9 +34,8 @@ void AAuraEnemy::BeginPlay()
 
 void AAuraEnemy::SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value)
 {
-	if (SkeletalMeshComp)
-	{
-		SkeletalMeshComp->SetRenderCustomDepth(bHighlighted);
-		SkeletalMeshComp->SetCustomDepthStencilValue(Value);
-	}
+	if (!SkeletalMeshComp) return;
+
+	SkeletalMeshComp->SetRenderCustomDepth(bHighlighted);
+	SkeletalMeshComp->SetCustomDepthStencilValue(Value);
 }
