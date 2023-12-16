@@ -19,10 +19,17 @@ public:
 	virtual void UnHighlightActor() override;
 	// ~Enemy Interface
 
+	// Combat Interface
+	virtual int32 GetPlayerLevel() const override;
+	// ~Combat Interface
+
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void InitAbilityActorInfo() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+	int32 Level = 1;
 
 private:
 	void SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value);

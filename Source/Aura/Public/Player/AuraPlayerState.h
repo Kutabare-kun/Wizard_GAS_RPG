@@ -19,10 +19,19 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
+	int32 GetPlayerLevel() const { return Level; }
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+private:
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = "OnRep_LevelUp", Category = "Level")
+	int32 Level = 1;
+
+	UFUNCTION()
+	void OnRep_LevelUp(int32 OldLevel);
 };

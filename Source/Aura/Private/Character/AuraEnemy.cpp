@@ -26,6 +26,11 @@ void AAuraEnemy::UnHighlightActor()
 	SetDepthAndStencil(Weapon, false, 0);
 }
 
+int32 AAuraEnemy::GetPlayerLevel() const
+{
+	return Level;
+}
+
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
