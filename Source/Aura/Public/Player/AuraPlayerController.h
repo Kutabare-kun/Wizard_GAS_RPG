@@ -11,28 +11,28 @@ class IEnemyInterface;
 UCLASS()
 class AURA_API AAuraPlayerController : public APlayerController
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	AAuraPlayerController();
+    AAuraPlayerController();
 
-	virtual void PlayerTick(float DeltaTime) override;
+    virtual void PlayerTick(float DeltaTime) override;
 
 protected:
-	virtual void BeginPlay() override;
-	virtual void SetupInputComponent() override;
+    virtual void BeginPlay() override;
+    virtual void SetupInputComponent() override;
 
 private:
-	void Move(const struct FInputActionValue& InputActionValue);
+    void Move(const struct FInputActionValue& InputActionValue);
 
-	void CursorTrace();
+    void CursorTrace();
 
-	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputMappingContext> AuraContext;
+    UPROPERTY(EditAnywhere, Category = "Input")
+    TObjectPtr<UInputMappingContext> AuraContext;
 
-	UPROPERTY(EditAnywhere, Category = "Input")
-	TObjectPtr<UInputAction> MoveAction;
+    UPROPERTY(EditAnywhere, Category = "Input")
+    TObjectPtr<UInputAction> MoveAction;
 
-	IEnemyInterface* LastActor;
-	IEnemyInterface* ThisActor;
+    IEnemyInterface* LastActor;
+    IEnemyInterface* ThisActor;
 };

@@ -7,30 +7,30 @@
 
 UCLASS()
 class AURA_API AAuraEnemy
-	: public AAuraCharacterBase, public IEnemyInterface
+    : public AAuraCharacterBase, public IEnemyInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	AAuraEnemy();
+    AAuraEnemy();
 
-	// Enemy Interface
-	virtual void HighlightActor() override;
-	virtual void UnHighlightActor() override;
-	// ~Enemy Interface
+    // Enemy Interface
+    virtual void HighlightActor() override;
+    virtual void UnHighlightActor() override;
+    // ~Enemy Interface
 
-	// Combat Interface
-	virtual int32 GetPlayerLevel() const override;
-	// ~Combat Interface
+    // Combat Interface
+    virtual int32 GetPlayerLevel() const override;
+    // ~Combat Interface
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
-	virtual void InitAbilityActorInfo() override;
+    virtual void InitAbilityActorInfo() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
-	int32 Level = 1;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Class Defaults")
+    int32 Level = 1;
 
 private:
-	void SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value);
+    void SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value);
 };

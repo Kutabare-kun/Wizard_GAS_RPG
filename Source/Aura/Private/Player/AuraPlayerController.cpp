@@ -5,105 +5,105 @@
 
 AAuraPlayerController::AAuraPlayerController()
 {
-	bReplicates = true;
+    bReplicates = true;
 }
 
 void AAuraPlayerController::PlayerTick(float DeltaTime)
 {
-	Super::PlayerTick(DeltaTime);
+    Super::PlayerTick(DeltaTime);
 
-	CursorTrace();
+    CursorTrace();
 }
 
 void AAuraPlayerController::CursorTrace()
 {
-	FHitResult CursorHit;
-	GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
-	if (!CursorHit.bBlockingHit) return;
+    FHitResult CursorHit;
+    GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+    if (!CursorHit.bBlockingHit) return;
 
-	LastActor = ThisActor;
-	ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
+    LastActor = ThisActor;
+    ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
 
-	/**
-	 * Line trace from cursor. There are several scenarios:
-	 * A. LastActor is nullptr && ThisActor is nullptr
-	 *		- Do nothing
-	 * B. LastActor is nullptr && ThisActor is valid
-	 *		- Highlight ThisActor
-	 * C. LastActor is valid && ThisActor is nullptr
-	 *		- UnHighlight LastActor
-	 * D. Both actors are valid, but LastActor != ThisActor
-	 *		- UnHighlight LastActor, and Highlight ThisActor
-	 * E. Both actors are valid, and are the same actor
-	 *		- Do nothing
-	 */
+    /**
+     * Line trace from cursor. There are several scenarios:
+     * A. LastActor is nullptr && ThisActor is nullptr
+     *		- Do nothing
+     * B. LastActor is nullptr && ThisActor is valid
+     *		- Highlight ThisActor
+     * C. LastActor is valid && ThisActor is nullptr
+     *		- UnHighlight LastActor
+     * D. Both actors are valid, but LastActor != ThisActor
+     *		- UnHighlight LastActor, and Highlight ThisActor
+     * E. Both actors are valid, and are the same actor
+     *		- Do nothing
+     */
 
-	if (!LastActor)
-	{
-		if (ThisActor)
-		{
-			ThisActor->HighlightActor();
-		}
-	}
-	else
-	{
-		if (!ThisActor)
-		{
-			LastActor->UnHighlightActor();
-		}
-		else
-		{
-			if (LastActor != ThisActor)
-			{
-				LastActor->UnHighlightActor();
-				ThisActor->HighlightActor();
-			}
-		}
-	}
+    if (!LastActor)
+    {
+        if (ThisActor)
+        {
+            ThisActor->HighlightActor();
+        }
+    }
+    else
+    {
+        if (!ThisActor)
+        {
+            LastActor->UnHighlightActor();
+        }
+        else
+        {
+            if (LastActor != ThisActor)
+            {
+                LastActor->UnHighlightActor();
+                ThisActor->HighlightActor();
+            }
+        }
+    }
 }
 
 void AAuraPlayerController::BeginPlay()
 {
-	Super::BeginPlay();
-	check(AuraContext);
+    Super::BeginPlay();
+    check(AuraContext);
 
-	UEnhancedInputLocalPlayerSubsystem* Subsystem =
-		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	if (Subsystem)
-	{
-		Subsystem->AddMappingContext(AuraContext, 0);
-	}
+    UEnhancedInputLocalPlayerSubsystem* Subsystem =
+        ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+    if (Subsystem)
+    {
+        Subsystem->AddMappingContext(AuraContext, 0);
+    }
 
-	bShowMouseCursor = true;
-	DefaultMouseCursor = EMouseCursor::Default;
+    bShowMouseCursor = true;
+    DefaultMouseCursor = EMouseCursor::Default;
 
-	FInputModeGameAndUI InputModeData;
-	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	InputModeData.SetHideCursorDuringCapture(false);
-	SetInputMode(InputModeData);
+    FInputModeGameAndUI InputModeData;
+    InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+    InputModeData.SetHideCursorDuringCapture(false);
+    SetInputMode(InputModeData);
 }
 
 void AAuraPlayerController::SetupInputComponent()
 {
-	Super::SetupInputComponent();
+    Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+    UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+    EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 {
-	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
-	const FRotator Rotation = GetControlRotation();
-	const FRotator YawRotation{0.0f, Rotation.Yaw, 0.0f};
+    const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
+    const FRotator Rotation = GetControlRotation();
+    const FRotator YawRotation{0.0f, Rotation.Yaw, 0.0f};
 
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+    const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+    const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-	if (APawn* ControlledPawn = GetPawn<APawn>())
-	{
-		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
-		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
-	}
+    if (APawn* ControlledPawn = GetPawn<APawn>())
+    {
+        ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
+        ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+    }
 }

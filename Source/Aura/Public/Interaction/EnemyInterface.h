@@ -7,14 +7,14 @@
 UINTERFACE(MinimalAPI)
 class UEnemyInterface : public UInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 };
 
 class AURA_API IEnemyInterface
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	virtual void HighlightActor() = 0;
-	virtual void UnHighlightActor() = 0;
+    virtual void HighlightActor() = 0;
+    virtual void UnHighlightActor() = 0;
 };

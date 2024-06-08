@@ -5,48 +5,48 @@
 
 AAuraEnemy::AAuraEnemy()
 {
-	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
+    GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+    AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+    AbilitySystemComponent->SetIsReplicated(true);
+    AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
-	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(TEXT("AttributeSet"));
+    AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>(TEXT("AttributeSet"));
 }
 
 void AAuraEnemy::HighlightActor()
 {
-	SetDepthAndStencil(GetMesh(), true, CUSTOM_DEPTH_RED);
-	SetDepthAndStencil(Weapon, true, CUSTOM_DEPTH_RED);
+    SetDepthAndStencil(GetMesh(), true, CUSTOM_DEPTH_RED);
+    SetDepthAndStencil(Weapon, true, CUSTOM_DEPTH_RED);
 }
 
 void AAuraEnemy::UnHighlightActor()
 {
-	SetDepthAndStencil(GetMesh(), false, 0);
-	SetDepthAndStencil(Weapon, false, 0);
+    SetDepthAndStencil(GetMesh(), false, 0);
+    SetDepthAndStencil(Weapon, false, 0);
 }
 
 int32 AAuraEnemy::GetPlayerLevel() const
 {
-	return Level;
+    return Level;
 }
 
 void AAuraEnemy::BeginPlay()
 {
-	Super::BeginPlay();
-	InitAbilityActorInfo();
+    Super::BeginPlay();
+    InitAbilityActorInfo();
 }
 
 void AAuraEnemy::InitAbilityActorInfo()
 {
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+    AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }
 
 void AAuraEnemy::SetDepthAndStencil(USkeletalMeshComponent* SkeletalMeshComp, bool bHighlighted, int32 Value)
 {
-	if (!SkeletalMeshComp) return;
+    if (!SkeletalMeshComp) return;
 
-	SkeletalMeshComp->SetRenderCustomDepth(bHighlighted);
-	SkeletalMeshComp->SetCustomDepthStencilValue(Value);
+    SkeletalMeshComp->SetRenderCustomDepth(bHighlighted);
+    SkeletalMeshComp->SetCustomDepthStencilValue(Value);
 }

@@ -11,68 +11,68 @@
 
 AAuraCharacter::AAuraCharacter()
 {
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
-	GetCharacterMovement()->bConstrainToPlane = true;
-	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+    GetCharacterMovement()->bOrientRotationToMovement = true;
+    GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
+    GetCharacterMovement()->bConstrainToPlane = true;
+    GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationRoll = false;
-	bUseControllerRotationYaw = false;
+    bUseControllerRotationPitch = false;
+    bUseControllerRotationRoll = false;
+    bUseControllerRotationYaw = false;
 
-	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
-	SpringArmComp->TargetArmLength = 750.0f;
-	SpringArmComp->bEnableCameraLag = true;
-	SpringArmComp->bInheritPitch = false;
-	SpringArmComp->bInheritRoll = false;
-	SpringArmComp->bInheritYaw = false;
-	SpringArmComp->SetupAttachment(GetRootComponent());
+    SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
+    SpringArmComp->TargetArmLength = 750.0f;
+    SpringArmComp->bEnableCameraLag = true;
+    SpringArmComp->bInheritPitch = false;
+    SpringArmComp->bInheritRoll = false;
+    SpringArmComp->bInheritYaw = false;
+    SpringArmComp->SetupAttachment(GetRootComponent());
 
-	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
-	CameraComp->SetupAttachment(SpringArmComp);
+    CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
+    CameraComp->SetupAttachment(SpringArmComp);
 }
 
 void AAuraCharacter::InitAbilityActorInfo()
 {
-	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState)
+    AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+    check(AuraPlayerState)
 
-	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-	Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
-	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
-	AttributeSet = AuraPlayerState->GetAttributeSet();
+    AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
+    Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
+    AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
+    AttributeSet = AuraPlayerState->GetAttributeSet();
 
-	if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
-	{
-		if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
-		{
-			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
-		}
-	}
+    if (AAuraPlayerController* AuraPlayerController = Cast<AAuraPlayerController>(GetController()))
+    {
+        if (AAuraHUD* AuraHUD = Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
+        {
+            AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
+        }
+    }
 
-	InitializeDefaultAttributes();
+    InitializeDefaultAttributes();
 }
 
 void AAuraCharacter::PossessedBy(AController* NewController)
 {
-	Super::PossessedBy(NewController);
+    Super::PossessedBy(NewController);
 
-	// Init ability actor info for the Server
-	InitAbilityActorInfo();
+    // Init ability actor info for the Server
+    InitAbilityActorInfo();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
 {
-	Super::OnRep_PlayerState();
+    Super::OnRep_PlayerState();
 
-	// Init ability actor info for the Client
-	InitAbilityActorInfo();
+    // Init ability actor info for the Client
+    InitAbilityActorInfo();
 }
 
 int32 AAuraCharacter::GetPlayerLevel() const
 {
-	const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-	check(AuraPlayerState)
+    const AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+    check(AuraPlayerState)
 
-	return AuraPlayerState ? AuraPlayerState->GetPlayerLevel() : Super::GetPlayerLevel();
+    return AuraPlayerState ? AuraPlayerState->GetPlayerLevel() : Super::GetPlayerLevel();
 }
