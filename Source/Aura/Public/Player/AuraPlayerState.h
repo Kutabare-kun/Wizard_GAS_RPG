@@ -16,6 +16,7 @@ class AURA_API AAuraPlayerState
 
 public:
     AAuraPlayerState();
+
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
     UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 

@@ -22,20 +22,20 @@ void AAuraPlayerController::CursorTrace()
     if (!CursorHit.bBlockingHit) return;
 
     LastActor = ThisActor;
-    ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
+    ThisActor = CursorHit.GetActor();
 
     /**
      * Line trace from cursor. There are several scenarios:
      * A. LastActor is nullptr && ThisActor is nullptr
-     *		- Do nothing
+     *      - Do nothing
      * B. LastActor is nullptr && ThisActor is valid
-     *		- Highlight ThisActor
+     *      - Highlight ThisActor
      * C. LastActor is valid && ThisActor is nullptr
-     *		- UnHighlight LastActor
+     *      - UnHighlight LastActor
      * D. Both actors are valid, but LastActor != ThisActor
-     *		- UnHighlight LastActor, and Highlight ThisActor
+     *      - UnHighlight LastActor, and Highlight ThisActor
      * E. Both actors are valid, and are the same actor
-     *		- Do nothing
+     *      - Do nothing
      */
 
     if (!LastActor)
