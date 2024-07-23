@@ -56,12 +56,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Widget Data")
     TObjectPtr<UDataTable> MessageWidgetDataTable;
 
-    template <typename T>
-    static [[nodiscard]] T* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
+    template <typename Type>
+    static [[nodiscard]] Type* GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag);
 };
 
-template <typename T>
-T* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
+template <typename Type>
+Type* UOverlayWidgetController::GetDataTableRowByTag(UDataTable* DataTable, const FGameplayTag& Tag)
 {
-    return DataTable->FindRow<T>(Tag.GetTagName(), TEXT(""));
+    return DataTable->FindRow<Type>(Tag.GetTagName(), TEXT(""));
 }

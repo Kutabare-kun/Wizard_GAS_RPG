@@ -46,7 +46,7 @@ public:
     UFUNCTION(BlueprintCallable)
     void SetWidgetControllerParams(const FWidgetControllerParams& WCParams);
 
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable)
     virtual void BroadcastInitialValues() PURE_VIRTUAL(UAuraWidgetController::BroadcastInitialValues, ;);
 
     UFUNCTION()
