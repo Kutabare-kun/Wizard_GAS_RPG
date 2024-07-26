@@ -21,7 +21,7 @@ AAuraCharacter::AAuraCharacter()
     bUseControllerRotationYaw = false;
 
     SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
-    SpringArmComp->TargetArmLength = 750.0f;
+    SpringArmComp->TargetArmLength = 800.0f;
     SpringArmComp->bEnableCameraLag = true;
     SpringArmComp->bInheritPitch = false;
     SpringArmComp->bInheritRoll = false;
@@ -59,6 +59,7 @@ void AAuraCharacter::PossessedBy(AController* NewController)
 
     // Init ability actor info for the Server
     InitAbilityActorInfo();
+    AddCharacterAbilities();
 }
 
 void AAuraCharacter::OnRep_PlayerState()
