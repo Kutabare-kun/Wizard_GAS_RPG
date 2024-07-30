@@ -1,15 +1,27 @@
 #include "Character/AuraCharacterBase.h"
 #include "AbilitySystemComponent.h"
+#include "MotionWarpingComponent.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Aura/Aura.h"
+#include "Components/CapsuleComponent.h"
 
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
     PrimaryActorTick.bCanEverTick = false;
 
+    GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+    GetCapsuleComponent()->SetGenerateOverlapEvents(false);
+
+    GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+    GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
+    GetMesh()->SetGenerateOverlapEvents(true);
+
     Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Weapon"));
     Weapon->SetupAttachment(GetMesh(), FName(TEXT("WeaponHandSocket")));
     Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+    MotionWarpingComp = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarping"));
 }
 
 UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
@@ -58,4 +70,9 @@ FVector AAuraCharacterBase::GetCombatSocketLocation() const
 {
     check(Weapon);
     return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
+void AAuraCharacterBase::UpdateFacingTarget_Implementation(const FVector& Target)
+{
+    MotionWarpingComp->AddOrUpdateWarpTargetFromLocation(WarpTargetName, Target);
 }

@@ -39,6 +39,11 @@ private:
 
     void AutoRun();
 
+    void ShiftPressed();
+    void ShiftReleased();
+
+    bool bShiftKeyDown = false;
+
     UPROPERTY()
     TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
 
@@ -47,6 +52,9 @@ private:
 
     UPROPERTY(EditAnywhere, Category = "Input")
     TObjectPtr<UInputAction> MoveAction;
+
+    UPROPERTY(EditAnywhere, Category = "Input")
+    TObjectPtr<UInputAction> ShiftAction;
 
     UPROPERTY(EditDefaultsOnly, Category = "Input")
     TObjectPtr<UAuraInputConfig> InputConfig;

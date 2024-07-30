@@ -6,6 +6,7 @@
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UMotionWarpingComponent;
 class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
@@ -35,6 +36,8 @@ protected:
 
     // Combat Interface
     virtual FVector GetCombatSocketLocation() const override;
+
+    virtual void UpdateFacingTarget_Implementation(const FVector& Target) override;
     // ~Combat Interface
 
     UPROPERTY(EditAnywhere, Category = "Combat")
@@ -42,6 +45,12 @@ protected:
 
     UPROPERTY(EditAnywhere, Category = "Combat")
     TObjectPtr<USkeletalMeshComponent> Weapon;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
+    TObjectPtr<UMotionWarpingComponent> MotionWarpingComp;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Motion Warping")
+    FName WarpTargetName;
 
     UPROPERTY()
     TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

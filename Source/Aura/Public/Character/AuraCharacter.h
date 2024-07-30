@@ -6,6 +6,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class UMotionWarpingComponent;
 
 UCLASS()
 class AURA_API AAuraCharacter : public AAuraCharacterBase
@@ -24,10 +25,10 @@ public:
     // ~Combat Interface
 
 protected:
-    UPROPERTY(EditDefaultsOnly, Category = "Components")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
     TObjectPtr<USpringArmComponent> SpringArmComp;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Components")
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
     TObjectPtr<UCameraComponent> CameraComp;
 
 private:
