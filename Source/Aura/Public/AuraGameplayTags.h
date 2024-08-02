@@ -35,12 +35,22 @@ public:
     FGameplayTag Attributes_Secondary_MaxMana;
     // ~Secondary Attributes
 
+    // Input Tags
     FGameplayTag InputTag_LMB;
     FGameplayTag InputTag_RMB;
     FGameplayTag InputTag_1;
     FGameplayTag InputTag_2;
     FGameplayTag InputTag_3;
     FGameplayTag InputTag_4;
+    // ~Input Tags
+
+    //
+    FGameplayTag Damage;
+    //
+
+    //
+    FGameplayTag Effects_HitReact;
+    //
 
 protected:
 

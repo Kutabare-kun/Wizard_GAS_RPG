@@ -4,6 +4,9 @@
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 #include "AuraGameplayTags.h"
+#include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/AuraPlayerController.h"
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
@@ -18,13 +21,19 @@ UAuraAttributeSet::UAuraAttributeSet()
 
     // Secondary Attributes
     TagsToAttributes.Add(GameplayTags.Attributes_Secondary_Armor, UAuraAttributeSet::GetArmorAttribute);
-    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_ArmorPenetration, UAuraAttributeSet::GetArmorPenetrationAttribute);
+    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_ArmorPenetration,
+                         UAuraAttributeSet::GetArmorPenetrationAttribute);
     TagsToAttributes.Add(GameplayTags.Attributes_Secondary_BlockChance, UAuraAttributeSet::GetBlockChanceAttribute);
-    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CriticalHitChance, UAuraAttributeSet::GetCriticalHitChanceAttribute);
-    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CriticalHitDamage, UAuraAttributeSet::GetCriticalHitDamageAttribute);
-    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CriticalHitResistance, UAuraAttributeSet::GetCriticalHitResistanceAttribute);
-    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_HealthRegeneration, UAuraAttributeSet::GetHealthRegenerationAttribute);
-    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_ManaRegeneration, UAuraAttributeSet::GetManaRegenerationAttribute);
+    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CriticalHitChance,
+                         UAuraAttributeSet::GetCriticalHitChanceAttribute);
+    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CriticalHitDamage,
+                         UAuraAttributeSet::GetCriticalHitDamageAttribute);
+    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_CriticalHitResistance,
+                         UAuraAttributeSet::GetCriticalHitResistanceAttribute);
+    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_HealthRegeneration,
+                         UAuraAttributeSet::GetHealthRegenerationAttribute);
+    TagsToAttributes.Add(GameplayTags.Attributes_Secondary_ManaRegeneration,
+                         UAuraAttributeSet::GetManaRegenerationAttribute);
     TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxHealth, UAuraAttributeSet::GetMaxHealthAttribute);
     TagsToAttributes.Add(GameplayTags.Attributes_Secondary_MaxMana, UAuraAttributeSet::GetMaxManaAttribute);
     // ~Secondary Attributes
@@ -92,14 +101,55 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
     if (Data.EvaluatedData.Attribute == GetHealthAttribute())
     {
         SetHealth(FMath::Clamp(GetHealth(), 0.0f, GetMaxHealth()));
-
-        UE_LOG(LogTemp, Warning, TEXT("Change Health on %s, Health: %f"), *Props.TargetAvatarActor->GetName(), GetHealth());
+        UE_LOG(LogTemp, Warning, TEXT("Change Health on %s, Health: %f"), *Props.TargetAvatarActor->GetName(),
+               GetHealth());
     }
 
     if (Data.EvaluatedData.Attribute == GetManaAttribute())
     {
         SetMana(FMath::Clamp(GetMana(), 0.0f, GetMaxMana()));
     }
+
+    if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+    {
+        const float LocalIncomingDamage = GetIncomingDamage();
+        SetIncomingDamage(0.0f);
+
+        if (LocalIncomingDamage > 0.0f)
+        {
+            const float NewHealth = GetHealth() - LocalIncomingDamage;
+            SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
+
+            const bool bFatal = NewHealth <= 0.0f;
+            if (bFatal)
+            {
+                ICombatInterface* CombatInterface = Cast<ICombatInterface>(Props.TargetAvatarActor);
+                if (!CombatInterface) return;
+
+                CombatInterface->Die();
+            }
+            else
+            {
+                FGameplayTagContainer TagContainer;
+                TagContainer.AddTag(FAuraGameplayTags::Get().Effects_HitReact);
+
+                Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+            }
+
+            ShowFloatingText(Props, LocalIncomingDamage);
+        }
+    }
+}
+
+void UAuraAttributeSet::ShowFloatingText(const FEffectProperties& Props, const float Damage) const
+{
+    if (Props.SourceCharacter == Props.TargetCharacter) return;
+
+    AAuraPlayerController* AuraPC = Cast<AAuraPlayerController>(
+        UGameplayStatics::GetPlayerController(Props.SourceCharacter, 0));
+    if (!AuraPC) return;
+
+    AuraPC->ClientShowDamageNumber(Damage, Props.TargetCharacter);
 }
 
 void UAuraAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

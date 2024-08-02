@@ -24,6 +24,7 @@ public:
     virtual int32 GetPlayerLevel() const override;
     // ~Combat Interface
 
+
 protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
     TObjectPtr<USpringArmComponent> SpringArmComp;

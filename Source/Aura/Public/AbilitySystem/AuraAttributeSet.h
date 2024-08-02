@@ -48,7 +48,7 @@ struct FEffectProperties
 };
 
 // typedef is specific to the  FGameplayAttribute() signature, but TStaticFuncPtr is generic to any signature chosen
-template<typename Type>
+template <typename Type>
 using TStaticFuncPtr = typename TBaseStaticDelegateInstance<Type, FDefaultDelegateUserPolicy>::FFuncPtr;
 
 UCLASS()
@@ -141,6 +141,14 @@ public:
     FGameplayAttributeData MaxMana;
     ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
 
+    /*
+     * Meta Attributes
+     */
+
+    UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+    FGameplayAttributeData IncomingDamage;
+    ATTRIBUTE_ACCESSORS(UAuraAttributeSet, IncomingDamage);
+
     UFUNCTION()
     void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 
@@ -191,4 +199,5 @@ public:
 
 private:
     void SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& Props);
+    void ShowFloatingText(const FEffectProperties& Props, const float Damage) const;
 };

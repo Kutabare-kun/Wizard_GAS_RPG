@@ -10,6 +10,7 @@ class UMotionWarpingComponent;
 class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
+class UAnimMontage;
 
 UCLASS(Abstract)
 class AURA_API AAuraCharacterBase
@@ -22,6 +23,14 @@ public:
 
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
     UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+
+    // Combat Interface
+    virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+    virtual void Die() override;
+    // ~Combat Interface
+
+    UFUNCTION(NetMulticast, Reliable)
+    virtual void MulticastHandleDeath();
 
 protected:
     virtual void BeginPlay() override;
@@ -39,6 +48,16 @@ protected:
 
     virtual void UpdateFacingTarget_Implementation(const FVector& Target) override;
     // ~Combat Interface
+
+    // Dissolve Effects
+    void Dissolve();
+
+    UFUNCTION(BlueprintImplementableEvent)
+    void StartMeshDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
+
+    UFUNCTION(BlueprintImplementableEvent)
+    void StartWeaponDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
+    // ~Dissolve Effects
 
     UPROPERTY(EditAnywhere, Category = "Combat")
     FName WeaponTipSocketName;
@@ -67,7 +86,18 @@ protected:
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Attributes")
     TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 
+    // Dissolve Effects
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Dissolve")
+    TObjectPtr<UMaterialInstance> MeshDissolveMaterialInstance;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Dissolve")
+    TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+    // ~Dissolve Effects
+
 private:
     UPROPERTY(EditAnywhere, Category = "Abilities")
     TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+
+    UPROPERTY(EditAnywhere, Category = "Combat")
+    TObjectPtr<UAnimMontage> HitReactMontage;
 };

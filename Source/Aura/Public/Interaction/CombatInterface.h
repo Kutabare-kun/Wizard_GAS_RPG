@@ -11,6 +11,8 @@ class UCombatInterface : public UInterface
     GENERATED_BODY()
 };
 
+class UAnimMontage;
+
 /**
  * 
  */
@@ -25,4 +27,9 @@ public:
 
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
     void UpdateFacingTarget(const FVector& Target);
+
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
+    UAnimMontage* GetHitReactMontage();
+
+    virtual void Die() PURE_VIRTUAL(ICombatInterface::Die, return;);
 };
