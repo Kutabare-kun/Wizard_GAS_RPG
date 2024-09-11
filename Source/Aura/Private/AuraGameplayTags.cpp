@@ -116,8 +116,61 @@ void FAuraGameplayTags::InitializeNativeGameplayTags()
         FString("Damage")
     );
 
+    // Damage Types
+    GameplayTags.Damage_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Damage.Fire"),
+        FString("Fire Damage Type")
+    );
+
+    GameplayTags.Damage_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Damage.Lightning"),
+        FString("Lightning Damage Type")
+    );
+
+    GameplayTags.Damage_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Damage.Arcane"),
+        FString("Arcane Damage Type")
+    );
+
+    GameplayTags.Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Damage.Physical"),
+        FString("Physical Damage Type")
+    );
+    // ~Damage Types
+
+    // Resistances
+    GameplayTags.Attributes_Resistances_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Attributes.Resistances.Fire"),
+        FString("Resistance to Fire damage")
+    );
+
+    GameplayTags.Attributes_Resistances_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Attributes.Resistances.Lightning"),
+        FString("Resistance to Lightning damage")
+    );
+
+    GameplayTags.Attributes_Resistances_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Attributes.Resistances.Arcane"),
+        FString("Resistance to Arcane damage")
+    );
+
+    GameplayTags.Attributes_Resistances_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Attributes.Resistances.Physical"),
+        FString("Resistance to Physical damage")
+    );
+    // ~Resistances
+
+    // Map of Damage Types to Resistances
+    GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Fire, GameplayTags.Attributes_Resistances_Fire);
+    GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Lightning, GameplayTags.Attributes_Resistances_Lightning);
+    GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Arcane, GameplayTags.Attributes_Resistances_Arcane);
+    GameplayTags.DamageTypesToResistances.Add(GameplayTags.Damage_Physical, GameplayTags.Attributes_Resistances_Physical);
+    // ~Map of Damage Types to Resistances
+
+    // Effects
     GameplayTags.Effects_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
         FName("Effects.HitReact"),
         FString("Tag granted when Hit Reacting")
     );
+    // ~Effects
 }
